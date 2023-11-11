@@ -1,21 +1,7 @@
-import os
 import requests
 import json
-from dotenv import load_dotenv
 import inspect
 
-load_dotenv()
-
-username = os.getenv('USERNAME')
-password = os.getenv('PASSWORD')
-workspace = os.getenv('WORKSPACE')
-defaultReviewers = os.getenv('DEFAULT_REVIEWERS').split(',')
-min_date = os.getenv('MIN_DATE')
-
-base_url = "https://api.bitbucket.org/2.0/"
-headers = {
-  'Authorization': f'Basic {password}'
-}
 
 repos_in_workspace = []
 projects_in_workspace = []
