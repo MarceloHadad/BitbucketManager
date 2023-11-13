@@ -48,30 +48,6 @@ def set_inheritance_for_repository_settings(repo_name):
     if inheritance_response.status_code != 204:
         print(f'[{inspect.stack()[0][3]}] Error setting inheritance for repository settings for {repo_name}')
 
-def create_develop_branch(repo_name):
-    url = f'{base_url}repositories/{workspace}/{repo_name}/refs/branches/master'
-    master_branch_response = requests.get(url, headers=headers)
-
-    if master_branch_response.status_code != 200:
-        print(f'[{inspect.stack()[0][3]}] branch master not found in {repo_name}')
-        return
-    
-    master_branch_data = master_branch_response.json()
-
-    url = f'{base_url}repositories/{workspace}/{repo_name}/refs/branches'
-    target_content = master_branch_data['target']
-    payload = json.dumps({
-    "type": "branch",
-    "name": "develop",
-    "default_merge_strategy": "merge_commit",
-    "target": target_content
-    })
-
-    branch_response = requests.request("POST", url, headers=headers, data=payload)
-
-    if branch_response.status_code != 201:
-        print(f'[{inspect.stack()[0][3]}] Error creating develop branch for {repo_name}')
-
 def list_updated_repositories():
     for repo in repos_in_workspace:
         repo_updated_on = repo['updated_on']
