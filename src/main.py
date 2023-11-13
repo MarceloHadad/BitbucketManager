@@ -57,27 +57,6 @@ def list_updated_repositories():
 
     return updated_repos
 
-def set_default_reviewers_by_repo(repo_name):
-    url = f'{base_url}repositories/{workspace}/{repo_name}/default-reviewers/'
-    payload = ""
-
-    for reviewer in defaultReviewers:
-        url = f'{url}{reviewer}'
-        set_reviewer_response = requests.request("PUT", url, headers=headers, data=payload)
-        if set_reviewer_response.status_code != 200:
-            print(f'[{inspect.stack()[0][3]}] Error setting reviewer {reviewer} for repo {repo_name}')
-
-def delete_default_reviewers_by_repo(repo_name):
-    url = f'{base_url}repositories/{workspace}/{repo_name}/default-reviewers/'
-
-    for reviewer in defaultReviewers:
-        url = f'{url}{reviewer}'
-        response = requests.delete(url, headers=headers)
-        if response.status_code != 204:
-            print(f'[{inspect.stack()[0][3]}] Error deleting reviewer {reviewer} from repo {repo_name}')
-        else:
-            print(f'[{inspect.stack()[0][3]}] Reviewer {reviewer} deleted from repo {repo_name}')
-
 def set_default_reviewers_by_project(project_key):
     url = f'{base_url}workspaces/{workspace}/projects/{project_key}/default-reviewers'
     payload = ""
