@@ -18,46 +18,6 @@ def list_projects_in_workspace():
 
     print(f'[{inspect.stack()[0][3]}] {projects_in_workspace.__len__()} projects found')
 
-def get_branching_model_for_project():
-    for repo in repos_in_workspace:
-        repo_name = repo['slug']
-        url = f'{base_url}workspaces/{workspace}/projects/{repo["project"]["key"]}/branching-model'
-        branching_model_response = requests.get(url, headers=headers)
-        branching_model_data = branching_model_response.json()
-
-        development_branch = branching_model_data['development']['name']
-        production_branch = branching_model_data['production']['name']
-
-        if development_branch != "develop" or production_branch != "master":
-            print("[{inspect.stack()[0][3]}] The repo " + repo_name + " is not in accordance with the default branching model.")
-            check_branching_model.append(repo)
-
-def check_and_set_branching_model_for_repo():
-    for repo in repos_in_workspace:
-        repo_name = repo['slug']
-        url = f'{base_url}repositories/{workspace}/{repo_name}/branching-model'
-        branching_model_response = requests.get(url, headers=headers)
-        branching_model_data = branching_model_response.json()
-
-        if 'development' not in branching_model_data:
-            print(f'[{inspect.stack()[0][3]}] Repo {repo_name} "development" not in branching_model_data')
-            set_inheritance_for_repository_settings(repo_name)
-
-        if 'production' not in branching_model_data:
-            print(f'[{inspect.stack()[0][3]}] Repo {repo_name} "production" not in branching_model_data')
-            set_inheritance_for_repository_settings(repo_name)
-
-        if 'development' not in branching_model_data or 'production' not in branching_model_data:
-            continue
-
-        development_branch = branching_model_data['development']['name']
-        production_branch = branching_model_data['production']['name']
-
-        if development_branch != "develop" or production_branch != "master":
-            print(f'[{inspect.stack()[0][3]}] Repo {repo}: development_branch != "develop" or production_branch != "master"')
-            
-        set_inheritance_for_repository_settings(repo_name)
-
 def get_branch_restrictions():
     for repo in repos_in_workspace:
         repo_name = repo['slug']
