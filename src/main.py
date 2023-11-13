@@ -10,14 +10,6 @@ check_branching_model = []
 check_branch_restrictions = []
 updated_repos = []
 
-def list_projects_in_workspace():
-    url = f'{base_url}workspaces/{workspace}/projects'
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    projects_in_workspace.extend(data['values'])
-
-    print(f'[{inspect.stack()[0][3]}] {projects_in_workspace.__len__()} projects found')
-
 def get_branch_restrictions():
     for repo in repos_in_workspace:
         repo_name = repo['slug']
