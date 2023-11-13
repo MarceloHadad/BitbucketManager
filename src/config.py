@@ -8,6 +8,7 @@ username = os.getenv('USERNAME')
 password = os.getenv('PASSWORD')
 workspace = os.getenv('WORKSPACE')
 defaultReviewers = os.getenv('DEFAULT_REVIEWERS').split(',')
+defaultBranches = os.getenv('DEFAULT_BRANCHES').split(',')
 min_date = os.getenv('MIN_DATE')
 
 headers = {
