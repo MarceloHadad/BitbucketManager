@@ -57,16 +57,6 @@ def list_updated_repositories():
 
     return updated_repos
 
-def set_default_reviewers_by_project(project_key):
-    url = f'{base_url}workspaces/{workspace}/projects/{project_key}/default-reviewers'
-    payload = ""
-
-    for reviewer in defaultReviewers:
-        url = f'{url}/{reviewer}'
-        set_reviewer_response = requests.request("PUT", url, headers=headers, data=payload)
-        if set_reviewer_response.status_code != 200:
-            print(f'[{inspect.stack()[0][3]}] Error setting reviewer {reviewer} for project {project_key}')
-
 def list_repos_with_updated_commit():
     for repos in repos_in_workspace:
         repo_name = repos['slug']
