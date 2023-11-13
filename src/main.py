@@ -10,17 +10,6 @@ check_branching_model = []
 check_branch_restrictions = []
 updated_repos = []
 
-def get_branch_restrictions():
-    for repo in repos_in_workspace:
-        repo_name = repo['slug']
-        url = f'{base_url}repositories/{workspace}/{repo_name}/branch-restrictions'
-        branch_restrictions_response = requests.get(url, headers=headers)
-        branch_restrictions_data = branch_restrictions_response.json()
-
-        if branch_restrictions_data['values'] != None:
-            print(f'[{inspect.stack()[0][3]}] The repo {repo_name} is not in accordance with the default branch restrictions.')
-            check_branch_restrictions.append(repo)
-
 def get_main_branch():
     for repo in repos_in_workspace:
         repo_name = repo['slug']
