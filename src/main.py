@@ -18,22 +18,6 @@ def list_projects_in_workspace():
 
     print(f'[{inspect.stack()[0][3]}] {projects_in_workspace.__len__()} projects found')
 
-def list_repos_in_workspace():
-    url = f'{base_url}repositories/{workspace}'
-    response = requests.get(url, headers=headers)
-    repos_in_workspace.extend(response.json().get('values', []))
-
-    while True:
-        response = requests.get(url, headers=headers)
-        repos_in_workspace.extend(response.json().get('values', []))
-        next_url = response.json().get('next')
-        if next_url is None:
-            break
-        url = next_url
-
-    print(f'[{inspect.stack()[0][3]}] {repos_in_workspace.__len__()} repos found')
-    return repos_in_workspace
-
 def get_branching_model_for_project():
     for repo in repos_in_workspace:
         repo_name = repo['slug']
@@ -207,36 +191,3 @@ def list_repos_with_updated_commit():
         json.dump(updated_repos, f)
         print(f'[{inspect.stack()[0][3]}] {updated_repos.__len__()} repos updated after {min_date} saved in {file}')
 
-def delete_user_permissions(repo_name, user_id):
-    url = f'{base_url}repositories/{workspace}/{repo_name}/permissions-config/users/{user_id}'
-    response = requests.delete(url, headers=headers)
-    if response.status_code != 204:
-        print(f'[{inspect.stack()[0][3]}] Error deleting user {user_id} from repo {repo_name}')
-    else:
-        print(f'[{inspect.stack()[0][3]}] User {user_id} deleted from repo {repo_name}')
-
-def list_user_permissions(repo_name):
-    url = f'{base_url}repositories/{workspace}/{repo_name}/permissions-config/users'
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    values = data['values']
-
-    for value in values:
-        delete_user_permissions(repo_name, value['user']['uuid'])
-
-def delete_group_permissions(repo_name, group_slug):
-    url = f'{base_url}repositories/{workspace}/{repo_name}/permissions-config/groups/{group_slug}'
-    response = requests.delete(url, headers=headers)
-    if response.status_code != 204:
-        print(f'[{inspect.stack()[0][3]}] Error deleting group {group_slug} from repo {repo_name}')
-    else:
-        print(f'[{inspect.stack()[0][3]}] Group {group_slug} deleted from repo {repo_name}')
-
-def list_group_permissions(repo_name):
-    url = f'{base_url}repositories/{workspace}/{repo_name}/permissions-config/groups'
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    values = data['values']
-
-    for value in values:
-        delete_group_permissions(repo_name, value['group']['slug'])
